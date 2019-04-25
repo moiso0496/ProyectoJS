@@ -1,0 +1,149 @@
+﻿<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+
+        Login
+
+    </title>
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
+    <link href="css/toolkit.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <link href="css/application.css" rel="stylesheet">
+
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+        body {
+            width: 1px;
+            min-width: 100%;
+            *width: 100%;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<script>
+
+    function limpiarFurmularios() {
+        document.getElementById("username").value = '';
+        document.getElementById("password").value = '';
+        document.getElementById("passwordConfirm").value = '';
+        document.getElementById("email").value = '';
+
+    }
+
+    function myFunction() {
+        try {
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+            var passConfirm = document.getElementById("passwordConfirm").value;
+            var email = document.getElementById("email").value;
+
+
+            if (user == ""||pass==""||passConfirm==""||email==""){
+                alert("Campos Nulos");
+            }else{
+                if(pass==passConfirm){
+                    event.preventDefault();
+                    $.ajax({
+                        crossOrigin: true,
+                        url : 'http://admin:ulacit@13.90.93.32:5984/users/'+user,
+                        type : 'PUT',
+                        processData: false,
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({pass:pass,email:email}),
+                        success:function(result){
+                            if(result!="error"){
+                                limpiarFurmularios();
+                                alert("Registro Correcto, Proceda a entrar");
+                                open("login.html","_parent" );
+                            }else{
+                                limpiarFurmularios();
+                                alert("Usuario Ya Utilizado");
+                            }
+                        },
+                        error: function(){
+                            alert("Usuario Ya Utilizado");
+                            limpiarFurmularios();
+
+                        }
+                    });
+                }else {
+                    alert("Passwords no coinciden");
+                }
+            }
+        }
+        catch(err) {
+            alert(err.message);
+        }
+    }
+</script>
+
+
+
+<div class="container-fluid container-fill-height">
+    <div class="container-content-middle">
+        <form role="form" class="m-x-auto text-center app-login-form">
+
+            <a href="../index.html" class="app-brand m-b-lg">
+                <img src="img/brand.png" alt="brand">
+            </a>
+
+            <div class="form-group">
+                <input class="form-control" id="username" placeholder="Username">
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control"  id="password" placeholder="Password">
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control" id="passwordConfirm" placeholder="Re-type password">
+            </div>
+
+            <div class="form-group m-b-md">
+                <input type="email" class="form-control" id="email" placeholder="Email">
+            </div>
+
+            <div class="m-b-lg">
+
+                <button class="btn btn-default"><a href="login.html" style="color: black">Log In</a></button>
+
+                <button class="btn btn-primary" onclick="myFunction()">Sign up</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/toolkit.js"></script>
+<script src="js/application.js"></script>
+<script>
+    // execute/clear BS loaders for docs
+    $(function(){
+        if (window.BS&&window.BS.loader&&window.BS.loader.length) {
+            while(BS.loader.length){(BS.loader.pop())()}
+        }
+    })
+</script>
+
+
+
+</body>
+</html>
